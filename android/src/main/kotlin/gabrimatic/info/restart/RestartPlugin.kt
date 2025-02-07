@@ -1,6 +1,5 @@
 package gabrimatic.info.restart
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.annotation.NonNull
