@@ -20,7 +20,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 class RestartPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var context: Context
     private lateinit var channel: MethodChannel
-    private var activity: Activity? = null
 
     /**
      * Called when the plugin is attached to the Flutter engine.
