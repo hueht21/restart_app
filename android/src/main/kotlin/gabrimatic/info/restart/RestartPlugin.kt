@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
-import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -20,7 +18,7 @@ import io.flutter.plugin.common.MethodChannel.Result
  *
  * The main functionality is provided by the `onMethodCall` method.
  */
-class RestartPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class RestartPlugin : FlutterPlugin, MethodCallHandler {
     private lateinit var context: Context
     private lateinit var channel: MethodChannel
     private var activity: Activity? = null
@@ -65,28 +63,13 @@ class RestartPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
      * Restarts the application.
      */
     private fun restartApp() {
-        activity?.let { currentActivity ->
-            val intent =
-                currentActivity.packageManager.getLaunchIntentForPackage(currentActivity.packageName)
-            intent?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            currentActivity.startActivity(intent)
-            currentActivity.finishAffinity()
-        }
-    }
-
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
-    }
-
-    override fun onDetachedFromActivityForConfigChanges() {
-        activity = null
-    }
-
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        activity = binding.activity
-    }
-
-    override fun onDetachedFromActivity() {
-        activity = null
+        context.startActivity(
+            Intent.makeRestartActivityTask(
+                (context.packageManager.getLaunchIntentForPackage(
+                    context.packageName
+                ))!!.component
+            )
+        )
+        Runtime.getRuntime().exit(0)
     }
 }
