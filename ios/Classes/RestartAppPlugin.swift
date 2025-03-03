@@ -45,7 +45,10 @@ public class RestartAppPlugin: NSObject, FlutterPlugin {
                         }
                     }
                 } else {
-                    result(FlutterError(code: "PERMISSION_DENIED", message: "Notification permission not granted", details: nil))
+                    // result(FlutterError(code: "PERMISSION_DENIED", message: "Notification permission not granted", details: nil))
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        exit(0)
+                    }
                 }
             }
             result("Scheduling restart notification...")
